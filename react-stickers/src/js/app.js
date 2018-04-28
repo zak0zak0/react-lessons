@@ -5,6 +5,7 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
+        this.delete = this.delete.bind(this);
         this.state = {
             stickers: []
         }
@@ -18,13 +19,27 @@ export default class App extends React.Component {
         });
     }
 
+    delete(i) {
+        let arr = [...this.state.stickers];
+        arr.splice(i, 1);
+        this.setState({
+            stickers: arr
+        });
+    }
+
     render() {
 
-        let stickers = this.state.stickers.map((s, i) => <Sticker key={i} x={s.x} y={s.y}/>)
+        let stickers = this.state.stickers.map((s, i) => 
+            <Sticker delete={this.delete} 
+                     index={i} 
+                     key={i} 
+                     x={s.x} y={s.y}/>)
 
         return (
             <div className="wrapper">
-                {stickers}
+                <ul>
+                    {stickers}
+                </ul>
                 <button onClick={this.add} className="btn-add">+</button>
             </div>
         );

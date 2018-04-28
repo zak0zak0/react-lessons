@@ -8,13 +8,14 @@ export default class Sticker extends React.Component {
         this.onMouseUp = this.onMouseUp.bind(this);               
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
-        
+        this.delete = props.delete;
         this.state = {
             edit: false,
             move: false,
             x: props.x,
             y: props.y,
-            message: ''
+            message: '',
+            index: props.index
         }
     }
 
@@ -39,9 +40,11 @@ export default class Sticker extends React.Component {
     }
 
     onMouseDown(e) {
-        this.setState({
-            move: true
-        });
+        if (!this.state.edit) {
+            this.setState({
+                move: true
+            });
+        }        
     }
 
     onMouseMove(e) {
@@ -62,7 +65,7 @@ export default class Sticker extends React.Component {
         let [x,y] = [this.state.x + 'px', this.state.y + 'px'];
 
         return(
-            <div className="sticker" 
+            <li className="sticker" 
                  onDoubleClick={this.click}
                  onMouseDown={this.onMouseDown}
                  onMouseMove={this.onMouseMove}
@@ -70,10 +73,12 @@ export default class Sticker extends React.Component {
                  style={{ left: x, top: y}}>
                 {
                     this.state.edit 
-                    ? <input type="text" onChange={this.change} value={this.state.message}/>
+                    ? <div><input type="text" onChange={this.change} value={this.state.message}/>
+                      <button type="button" onClick={() => this.delete(this.state.index)}>X</button></div>
                     : <span>{this.state.message}</span> 
                 }
-            </div>
+                
+            </li>
         );
     }
 }
