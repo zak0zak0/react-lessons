@@ -1,3 +1,30 @@
-.red-bg {
-  background-color: red;
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+.wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: cadetblue;
+}
+.btn-add {
+  font-size: 50px;
+  float: right;
+}
+.sticker {
+  padding: 10px;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: burlywood;
+  box-shadow: 0 0 0.5px 0.5px rgba(0, 0, 0, 0.5);
+}
+.sticker input {
+  max-width: 100%;
+}
+.sticker span {
+  word-break: break-all;
 }
