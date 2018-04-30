@@ -1,5 +1,7 @@
 import React from 'react';
 
+const ANGLE = 5;
+
 export default class Sticker extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +16,8 @@ export default class Sticker extends React.Component {
             move: false,
             message: '',
             index: props.index,
-            transform: {
+            rotate: ANGLE,
+            position: {
                 x: props.x,
                 y: props.y,
             },
@@ -28,7 +31,8 @@ export default class Sticker extends React.Component {
     click() {
         this.setState({
             edit: !this.state.edit,
-            move: false
+            move: false,
+            rotate: this.state.edit ? ANGLE : 0
         });
     }
 
@@ -43,7 +47,7 @@ export default class Sticker extends React.Component {
         let newX = x - this.state.offset.x,
             newY = y - this.state.offset.y;
         this.setState({
-            transform: {
+            position: {
                 x: newX,
                 y: newY
             }
@@ -54,8 +58,8 @@ export default class Sticker extends React.Component {
         if (!this.state.edit) {
             this.setState({
                 offset: {
-                    x: e.clientX - this.state.transform.x,
-                    y: e.clientY - this.state.transform.y
+                    x: e.clientX - this.state.position.x,
+                    y: e.clientY - this.state.position.y
                 }
             });
             this.beginDrag(this.onMoveCallback)
@@ -63,9 +67,9 @@ export default class Sticker extends React.Component {
     }
     
     getStyle() {
-        let [x,y] = [this.state.transform.x, this.state.transform.y];
+        let [x,y, angle] = [this.state.position.x, this.state.position.y, this.state.rotate];
         let style = {
-            transform: `translate(${x}px,${y}px)`
+            transform: `translate(${x}px,${y}px) rotate(${angle}deg)`
         }
         return style;
     }

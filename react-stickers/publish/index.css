@@ -31,6 +31,7 @@ body,
 }
 .sticker span {
   word-break: break-all;
+  user-select: none;
 }
 .sticker button {
   color: red;
