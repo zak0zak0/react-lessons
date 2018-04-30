@@ -4,18 +4,24 @@ export default class Sticker extends React.Component {
     constructor(props) {
         super(props);
         this.click = this.click.bind(this);        
-        this.change = this.change.bind(this);        
-        this.onMouseUp = this.onMouseUp.bind(this);               
-        this.onMouseMove = this.onMouseMove.bind(this);
+        this.change = this.change.bind(this);                     
+        this.onMoveCallback = this.onMoveCallback.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
         this.delete = props.delete;
+        this.beginDrag = props.beginDrag;
         this.state = {
             edit: false,
             move: false,
-            x: props.x,
-            y: props.y,
             message: '',
-            index: props.index
+            index: props.index,
+            transform: {
+                x: props.x,
+                y: props.y,
+            },
+            offset: {
+                x: 0,
+                y: 0
+            }
         }
     }
 
@@ -33,48 +39,51 @@ export default class Sticker extends React.Component {
         })
     }
 
-    onMouseUp(e) {        
+    onMoveCallback(x,y) {
+        let newX = x - this.state.offset.x,
+            newY = y - this.state.offset.y;
         this.setState({
-            move: false
-        });
+            transform: {
+                x: newX,
+                y: newY
+            }
+        })
     }
 
     onMouseDown(e) {
         if (!this.state.edit) {
             this.setState({
-                move: true
+                offset: {
+                    x: e.clientX - this.state.transform.x,
+                    y: e.clientY - this.state.transform.y
+                }
             });
-        }        
+            this.beginDrag(this.onMoveCallback)
+        }                
     }
-
-    onMouseMove(e) {
-        if (this.state.move) {
-            // var [mX, mY] = [e.clientX, e.clientY];
-            // var [x, y] = [this.state.x, this.state.y];
-            // var [dX, dY] = [mX - x, mY -]
-
-            this.setState({
-                x: e.clientX - 50,
-                y: e.clientY - 50
-            })
+    
+    getStyle() {
+        let [x,y] = [this.state.transform.x, this.state.transform.y];
+        let style = {
+            transform: `translate(${x}px,${y}px)`
         }
+        return style;
     }
 
     render() {
-
-        let [x,y] = [this.state.x + 'px', this.state.y + 'px'];
+        let style = this.getStyle();
 
         return(
             <li className="sticker" 
                  onDoubleClick={this.click}
-                 onMouseDown={this.onMouseDown}
-                 onMouseMove={this.onMouseMove}
-                 onMouseUp={this.onMouseUp}
-                 style={{ left: x, top: y}}>
+                 onMouseDown={this.onMouseDown}                
+                 style={style}>
                 {
                     this.state.edit 
-                    ? <div><input type="text" onChange={this.change} value={this.state.message}/>
-                      <button type="button" onClick={() => this.delete(this.state.index)}>X</button></div>
+                    ? <div>
+                        <input type="text" onChange={this.change} value={this.state.message}/>
+                        <button type="button" onClick={() => this.delete(this.state.index)}>X</button>
+                      </div>
                     : <span>{this.state.message}</span> 
                 }
                 

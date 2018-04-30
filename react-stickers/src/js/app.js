@@ -6,9 +6,15 @@ export default class App extends React.Component {
         super(props);
         this.add = this.add.bind(this);
         this.delete = this.delete.bind(this);
+        this.beginDrag = this.beginDrag.bind(this);
+        this.onMouseMove = this.onMouseMove.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
+
+
         this.state = {
             stickers: [],
-            nextId: 0
+            nextId: 0,
+            activeStickerCallback: null
         }
     }
 
@@ -31,15 +37,40 @@ export default class App extends React.Component {
         });
     }
 
+    beginDrag(transformCallback) {
+        this.setState({
+            activeStickerCallback: transformCallback
+        })
+    }
+
+    onMouseMove(e) {
+        if (this.state.activeStickerCallback !== null) {
+            let [x, y]= [e.clientX, e.clientY];
+            this.state.activeStickerCallback(x,y)
+        }
+    }
+
+    onMouseUp(e) {        
+        if (this.state.activeStickerCallback !== null) {
+            this.setState({
+                activeStickerCallback: null
+            })
+        }        
+    }
+
     render() {
         let stickers = this.state.stickers.map((s) => 
             <Sticker delete={this.delete} 
+                     beginDrag={this.beginDrag}
                      index={s.index} 
                      key={s.index} 
                      x={s.x} y={s.y}/>)
 
         return (
-            <div className="wrapper">
+            <div className="wrapper" 
+                 onMouseMove={this.onMouseMove}
+                 onMouseUp={this.onMouseUp}
+                 >
                 <ul>
                     {stickers}
                 </ul>
