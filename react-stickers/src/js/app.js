@@ -28,7 +28,6 @@ export default class App extends React.Component {
     }
 
     render() {
-
         let stickers = this.state.stickers.map((s, i) => 
             <Sticker delete={this.delete} 
                      index={i} 

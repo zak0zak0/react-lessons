@@ -10,6 +10,9 @@ module.exports = {
         path: path.resolve(__dirname, dist),
         filename: output
     },
+    devServer: {
+        contentBase: './publish'
+    }, 
     module: {
         rules: [
             {

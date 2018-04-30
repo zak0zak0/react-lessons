@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node node_modules/less/bin/lessc src/style/stickers.less publish/index.css && node node_modules/webpack/bin/webpack -d"
+    "build-less": "node node_modules/less/bin/lessc src/style/stickers.less publish/index.css",
+    "build-js": "node node_modules/webpack/bin/webpack -d",
+    "dev-server": "node node_modules/webpack-dev-server/bin/webpack-dev-server --open",
+    "start": "npm run build-less && npm run build-js && npm run dev-server"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +20,8 @@
     "babel-preset-react": "^6.24.1",
     "less": "^3.0.2",
     "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.15"
+    "webpack-cli": "^2.0.15",
+    "webpack-dev-server": "^3.1.3"
   },
   "dependencies": {
     "react": "^16.3.2",
