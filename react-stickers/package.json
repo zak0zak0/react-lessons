@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-less": "node node_modules/less/bin/lessc src/style/stickers.less publish/index.css",
     "build-js": "node node_modules/webpack/bin/webpack -d",
-    "dev-server": "node node_modules/webpack-dev-server/bin/webpack-dev-server --open",
-    "start": "npm run build-less && npm run build-js && npm run dev-server"
+    "build": "npm run build-less && npm run build-js",
+    "dev-server": "node node_modules/webpack-dev-server/bin/webpack-dev-server -d --open",
+    "start": "npm run build-less && npm run dev-server"
   },
   "author": "",
   "license": "ISC",
