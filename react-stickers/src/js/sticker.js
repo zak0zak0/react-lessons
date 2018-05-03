@@ -7,10 +7,12 @@ export default class Sticker extends React.Component {
         super(props);
         this.click = this.click.bind(this);        
         this.change = this.change.bind(this);                     
-        this.onMoveCallback = this.onMoveCallback.bind(this);
-        this.onMouseDown = this.onMouseDown.bind(this);
+        // this.onMoveCallback = this.onMoveCallback.bind(this);
+        // this.onMouseDown = this.onMouseDown.bind(this);
+        this.onDragStart = this.onDragStart.bind(this);
+        this.onDragEnd = this.onDragEnd.bind(this);
         this.delete = props.delete;
-        this.beginDrag = props.beginDrag;
+       // this.beginDrag = props.beginDrag;
         this.state = {
             edit: false,
             move: false,
@@ -20,10 +22,6 @@ export default class Sticker extends React.Component {
             position: {
                 x: props.x,
                 y: props.y,
-            },
-            offset: {
-                x: 0,
-                y: 0
             }
         }
     }
@@ -43,29 +41,23 @@ export default class Sticker extends React.Component {
         })
     }
 
-    onMoveCallback(x,y) {
-        let newX = x - this.state.offset.x,
-            newY = y - this.state.offset.y;
-        this.setState({
-            position: {
-                x: newX,
-                y: newY
-            }
-        })
+    onDragStart(e) {
+        let offsetX = e.clientX - this.state.position.x,
+            offsetY = e.clientY - this.state.position.y;        
+        e.dataTransfer.setData("offsetX", offsetX);
+        e.dataTransfer.setData("offsetY", offsetY);
+        e.dataTransfer.setData("id", this.state.index);
     }
 
-    onMouseDown(e) {
-        if (!this.state.edit) {
-            this.setState({
-                offset: {
-                    x: e.clientX - this.state.position.x,
-                    y: e.clientY - this.state.position.y
-                }
-            });
-            this.beginDrag(this.onMoveCallback)
-        }                
+    onDragEnd(e) {
+        this.setState({
+            position: {
+                x: this.props.x,
+                y: this.props.y
+            }
+        });
     }
-    
+
     getStyle() {
         let [x,y, angle] = [this.state.position.x, this.state.position.y, this.state.rotate];
         let style = {
@@ -78,9 +70,11 @@ export default class Sticker extends React.Component {
         let style = this.getStyle();
 
         return(
-            <li className="sticker" 
+            <span className="sticker" 
+                 draggable={!this.state.edit}
                  onDoubleClick={this.click}
-                 onMouseDown={this.onMouseDown}                
+                 onDragStart={this.onDragStart}    
+                 onDragEnd={this.onDragEnd}                             
                  style={style}>
                 {
                     this.state.edit 
@@ -91,7 +85,7 @@ export default class Sticker extends React.Component {
                     : <span>{this.state.message}</span> 
                 }
                 
-            </li>
+            </span>
         );
     }
 }
