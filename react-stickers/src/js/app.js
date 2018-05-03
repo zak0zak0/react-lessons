@@ -6,9 +6,6 @@ export default class App extends React.Component {
         super(props);
         this.add = this.add.bind(this);
         this.delete = this.delete.bind(this);
-        //   this.beginDrag = this.beginDrag.bind(this);
-        //  this.onMouseMove = this.onMouseMove.bind(this);
-        //  this.onMouseUp = this.onMouseUp.bind(this);
         this.onDrop = this.onDrop.bind(this);
 
 

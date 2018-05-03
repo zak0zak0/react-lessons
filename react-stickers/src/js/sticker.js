@@ -6,13 +6,10 @@ export default class Sticker extends React.Component {
     constructor(props) {
         super(props);
         this.click = this.click.bind(this);        
-        this.change = this.change.bind(this);                     
-        // this.onMoveCallback = this.onMoveCallback.bind(this);
-        // this.onMouseDown = this.onMouseDown.bind(this);
+        this.change = this.change.bind(this);             
         this.onDragStart = this.onDragStart.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
         this.delete = props.delete;
-       // this.beginDrag = props.beginDrag;
         this.state = {
             edit: false,
             move: false,
